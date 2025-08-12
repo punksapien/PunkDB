@@ -1,4 +1,27 @@
+#!/bin/bash
+
+# This line makes the script print out each command before running it, which is great for verbosity.
+set -x
+
+echo "--- Step 1: Re-creating the main software sources file ---"
+
+# This block of code creates the sources.list file using a 'Here Document'.
+# It's a clean way to write a multi-line file from a script.
+sudo tee /etc/apt/sources.list > /dev/null <<EOF
 deb http://archive.ubuntu.com/ubuntu/ noble main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ noble-updates main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ noble-backports main restricted universe multiverse
 deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
+EOF
+
+echo "--- Step 2: Updating package lists with the new sources ---"
+sudo apt update
+
+echo "--- Step 3: Upgrading all system packages (this may take a while) ---"
+# The -y flag automatically answers "yes" to any prompts, making the script non-interactive.
+sudo apt upgrade -y
+
+echo ""
+echo "--- SCRIPT FINISHED! ---"
+echo "The system should now be fixed. Please reboot the computer by typing:"
+echo "sudo reboot"
